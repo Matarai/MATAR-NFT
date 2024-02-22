@@ -1,0 +1,97 @@
+.main {
+  min-height: 100vh;
+  height: auto;
+  width: -webkit-fill-available;
+}
+
+.ps-sidebar-container {
+  background: linear-gradient(180deg, #000c2b 0%, #022640 86%) !important;
+}
+.ps-sidebar-root {
+  border: none !important;
+}
+.ps-menuitem-root.ps-active {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 183, 242, 0.25) 0%,
+    rgba(19, 79, 171, 0.25) 100%
+  );
+}
+.ps-menuitem-root.ps-active::before {
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #12b7f2 0%, #134fab 100%);
+}
+
+.css-qhslk5 {
+  font-family: "Russo One" !important;
+}
+
+/* .ps-menuitem-root.ps-active::after {
+  content: " ";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #12b7f2 0%, #134fab 100%);
+} */
+.ps-menu-button:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(18, 183, 242, 0.1) 0%,
+    rgba(19, 79, 171, 0.1) 100%
+  ) !important;
+}
+.accordion-button::after {
+  background-image: url(../assets/add.png) !important;
+}
+.accordion-button:not(.collapsed)::after {
+  background-image: url(../assets/minus.png) !important;
+}
+
+.social-icon {
+  border-radius: 5px;
+  background: linear-gradient(180deg, #12b7f2 0%, #134fab 100%);
+}
+
+.progress-bar {
+  border-radius: 5px;
+  background: linear-gradient(180deg, #12b7f2 0%, #134fab 100%);
+  /* transition: width 1s linear; */
+}
+
+.progress {
+  height: 30px !important;
+}
+
+/* mobile devices */
+
+@media only screen and (max-width: 600px) {
+  .f-64 {
+    font-size: 40px !important;
+  }
+  .f-20 {
+    font-size: 12px !important;
+    line-height: 25px !important;
+  }
+  .borderRight {
+    min-height: 100px !important;
+  }
+  .f-35 {
+    font-size: 20px !important;
+  }
+  .nftSalesMinterCard .tw-connect-wallet {
+    font-size: 14px !important;
+  }
+}
+
+@media only screen and (max-width: 392px) {
+  .nftSalesMinterCard .tw-connect-wallet {
+    margin-top: 15px;
+  }
+}

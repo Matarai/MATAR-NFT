@@ -1,0 +1,80 @@
+/* :root{
+    --accord-margin: 0px;
+    } */
+
+.accordion {
+  --bs-accordion-color: #fff;
+  --bs-accordion-bg: none !important;
+  border: none !important;
+  --bs-accordion-border-color: transparent !important;
+}
+/* set image as border color */
+.accordion-header {
+  border-bottom: 1px solid;
+  border-image: linear-gradient(to right, #5fb7fb, #1d51b0);
+  border-image-slice: 1;
+}
+.accordion-button:not(.collapsed) {
+  background: transparent !important;
+}
+.accordion-button {
+  background: transparent !important;
+  color: #fff !important;
+}
+.accordion-button:focus {
+  box-shadow: none !important;
+}
+
+.custom-accordion-icon.accordion-button::before {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAdCAYAAAC5UQwxAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB3SURBVHgB7dTBDYAgDAXQj+GuIzkCI7CBIziDGziCIzCCo7hB7YGTBzBIiAn/JU0T0vDDgQLUJRFZtFa0IhEKDGiMgQz8f6B9Huj3ctomvKCzPjNyGWOO1AVO6puReGHQ2rRGpPnYd+Sd+IqrjYEMrMqiTAB16wZTV3mIXHIFlwAAAABJRU5ErkJggg==) !important;
+}
+
+.custom-accordion-icon.accordion-button:not(.collapsed)::before {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAYAAAByDd+UAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABKSURBVHgB7c6xDYAgFEXR902MrSPoCO4/hCPoCNZSfFoSGggUkNxT3uLlSQCA6VhWHt/XzW+5DrV5w2+XTvvSuKjoRb0eGwCAQUTUCAkGP9NdRAAAAABJRU5ErkJggg==) !important;
+  transform: var(--bs-accordion-btn-icon-transform);
+}
+
+.custom-accordion-icon.accordion-button:not(.collapsed)::after {
+  background-image: none !important;
+  transform: var(--bs-accordion-btn-icon-transform);
+}
+.custom-accordion-icon.accordion-button::after {
+  background-image: none !important;
+}
+
+.custom-accordion-icon.accordion-button {
+  display: none;
+}
+
+.custom-accordion-icon.accordion-button::before {
+  flex-shrink: 0;
+  width: var(--bs-accordion-btn-icon-width);
+  height: var(--bs-accordion-btn-icon-width);
+  margin-left: 0;
+  content: "";
+  background-image: var(--bs-accordion-btn-icon) !important;
+  background-repeat: no-repeat;
+  background-size: var(--bs-accordion-btn-icon-width);
+  transition: var(--bs-accordion-btn-icon-transition);
+}
+
+.leftAlign {
+  position: absolute;
+  right: 0;
+}
+
+.accordion-button::after {
+  flex-shrink: 0;
+  width: var(--bs-accordion-btn-icon-width);
+  height: var(--bs-accordion-btn-icon-width);
+  margin-left: var(--accord-margin);
+  content: "";
+  background-image: var(--bs-accordion-btn-icon);
+  background-repeat: no-repeat;
+  background-size: var(--bs-accordion-btn-icon-width);
+  transition: var(--bs-accordion-btn-icon-transition);
+}
+
+.rtl .accordion-button::after{
+  margin-left: 0px !important;
+}
