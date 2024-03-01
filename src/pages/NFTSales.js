@@ -9,10 +9,106 @@ import { isMobile, isTablet } from "react-device-detect";
 import MobileNav from "../components/MobileNav";
 import { useSelector } from "react-redux";
 import { MobileFooter } from "../components/MobileFooter";
+import {
+  useAddress,
+  useContract,
+  useContractRead,
+  useContractWrite,
+  useNetwork,
+  useNetworkMismatch,
+} from "@thirdweb-dev/react";
+import { toast } from "sonner";
 
 export const NFTSales = () => {
   const { currentLanguage, rltStatus } = useSelector((state) => state.login);
   const [nftCount, setNftCount] = React.useState(1);
+  const [loading, setLoading] = React.useState(false);
+
+  const address = useAddress();
+  const isMismatched = useNetworkMismatch();
+  const [, switchNetwork] = useNetwork();
+
+  const { contract } = useContract(process.env.REACT_APP_CONTRACT_ADDRESS);
+  const { contract: tokenConract } = useContract(
+    process.env.REACT_APP_MATAR_TOKEN_ADDRESS
+  );
+
+  // Token Contract Read and Write
+  const { data: allowance, isLoading: allowanceLoading } = useContractRead(
+    tokenConract,
+    "allowance",
+    [address, process.env.REACT_APP_CONTRACT_ADDRESS]
+  );
+  const { mutateAsync: approve, isLoading: approveLoading } = useContractWrite(
+    tokenConract,
+    "approve"
+  );
+  const approveHandler = async (_amount) => {
+    try {
+      const data = await approve({
+        args: [process.env.REACT_APP_CONTRACT_ADDRESS, _amount],
+      });
+      toast.success("Approved successfully");
+    } catch (err) {
+      console.error("contract call failure", err);
+      toast.error(err.reason.toUpperCase() || "Failed to approve");
+    }
+  };
+
+  // NFT Contract Read and Write
+  const { data: totalMinted, isLoading: totalMintedLoading } = useContractRead(
+    contract,
+    "totalSupply"
+  );
+  const { data: maxSupply, isLoading: maxSupplyLoading } = useContractRead(
+    contract,
+    "maxSupply"
+  );
+  const { data: cost, isLoading: costLoading } = useContractRead(
+    contract,
+    "cost"
+  );
+  const { mutateAsync: mint, isLoading } = useContractWrite(contract, "mint");
+
+  const mintHandler = async () => {
+    // Network check
+    if (isMismatched) {
+      toast.error("Wrong Network try again", {
+        position: "top-right",
+      });
+      // Prompt their wallet to switch networks
+      switchNetwork(Number(process.env.REACT_APP_ACTIVE_CHAIN_ID));
+      return;
+    }
+    setLoading(true);
+    try {
+      // Allowance check
+      const totalCost = cost.mul(nftCount);
+      if (allowance.lt(totalCost)) {
+        toast.error("Insufficient MATAR allowance");
+        await approveHandler(totalCost);
+        setLoading(false);
+        return;
+      }
+
+      // Mint
+      const data = await mint({ args: [address, nftCount] });
+      toast.success("Success!", {
+        action: {
+          label: "View",
+          onClick: () => {
+            window.open(
+              `https://testnet.bscscan.com/tx/${data.receipt.transactionHash}`
+            );
+          },
+        },
+      });
+      setLoading(false);
+    } catch (err) {
+      console.error("contract call failure", err);
+      toast.error(err.reason.toUpperCase() || "Failed to mint");
+    }
+  };
 
   const handleIncrement = () => {
     setNftCount((prevCount) => prevCount + 1);
@@ -73,7 +169,9 @@ export const NFTSales = () => {
                       .map((step, index) => (
                         <Col
                           key={index}
-                          className={`animate__animated animate__fadeInUp animate__delay-${nftSales[currentLanguage].steps.length - index - 1}s`}
+                          className={`animate__animated animate__fadeInUp animate__delay-${
+                            nftSales[currentLanguage].steps.length - index - 1
+                          }s`}
                         >
                           <div>
                             <span className="fm-Keania f-35 tile p-2 mb-30">
@@ -172,14 +270,41 @@ export const NFTSales = () => {
                         </div>
                       </Col>
                       <Col className="my-auto fm-Russo">
-                        {" "}
-                        <ConnectWalletBtn width={"w-100"} />{" "}
+                        {address ? (
+                          <Button
+                            className="w-100 borderRadius bg-primary"
+                            variant="primary"
+                            onClick={mintHandler}
+                            disabled={loading}
+                          >
+                            {isLoading ? "Minting..." : "Mint"}
+                          </Button>
+                        ) : (
+                          <ConnectWalletBtn width={"w-100"} />
+                        )}
                       </Col>
                     </Row>
-                    <ProgressBar now={0} className="mt-25" />
+                    <ProgressBar
+                      now={
+                        !totalMintedLoading && !maxSupplyLoading
+                          ? (totalMinted.toNumber() / maxSupply.toNumber()) *
+                            100
+                          : 0
+                      }
+                      className="mt-25"
+                    />
                     <div className="d-flex justify-content-between mt-2 f-14">
                       <p className="mb-0">Total Minted</p>
-                      <p className="mb-0">0% (0/2,500)</p>
+                      <p className="mb-0">
+                        {!totalMintedLoading && !maxSupplyLoading
+                          ? (
+                              (totalMinted.toNumber() / maxSupply.toNumber()) *
+                              100
+                            ).toFixed(2)
+                          : 0}
+                        % ({totalMintedLoading ? "..." : totalMinted.toString()}
+                        / {maxSupplyLoading ? "..." : maxSupply.toString()})
+                      </p>
                     </div>
                   </div>
                 </Container>

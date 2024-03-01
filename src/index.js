@@ -37,7 +37,7 @@ root.render(
             walletConnect(),
             trustWallet(),
           ]}
-          activeChain={activeChain}
+          activeChain={process.env.REACT_APP_ACTIVE_CHAIN}
           clientId={process.env.REACT_APP_TEMPLATE_CLIENT_ID}
         >
           <Toaster richColors />
