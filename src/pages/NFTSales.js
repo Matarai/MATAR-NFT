@@ -98,7 +98,7 @@ export const NFTSales = () => {
           label: "View",
           onClick: () => {
             window.open(
-              `https://testnet.bscscan.com/tx/${data.receipt.transactionHash}`
+              `https://bscscan.com/tx/${data.receipt.transactionHash}`
             );
           },
         },
