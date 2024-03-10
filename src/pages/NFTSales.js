@@ -154,10 +154,15 @@ export const NFTSales = () => {
                   currentLanguage === "arabic" && "flex-row-reverse"
                 }`}
               >
-                <Button className="f-20 fm-Russo me-3 borderRadius mb-0 bg-primary">
+                <Button
+                  className="f-20 fm-Russo me-3 borderRadius mb-0 bg-primary"
+                  onClick={() => window.open("https://matar.ai")}
+                >
                   {nftSales[currentLanguage].btn1}
                 </Button>
-                <Button variant="outline-primary f-20 fm-Russo rounded-0 px-5 me-3">
+                <Button variant="outline-primary f-20 fm-Russo rounded-0 px-5 me-3"
+                  onClick={() => window.open(currentLanguage === "arabic" ? "https://matar.ai/whitepaper-ar.pdf" : "https://matar.ai/whitepaper-en.pdf")}
+                >
                   {nftSales[currentLanguage].btn2}
                 </Button>
               </div>
@@ -236,7 +241,7 @@ export const NFTSales = () => {
                       </Col>
                       <Col>
                         {" "}
-                        <p className="mb-0 f-14 text-end">$100 MATAR + GAS</p>
+                        <p className="mb-0 f-14 text-end">100 MATAR + GAS</p>
                       </Col>
                     </Row>
                   </div>
@@ -287,7 +292,7 @@ export const NFTSales = () => {
                     <ProgressBar
                       now={
                         !totalMintedLoading && !maxSupplyLoading
-                          ? (totalMinted.toNumber() / maxSupply.toNumber()) *
+                          ? (totalMinted?.toNumber() / maxSupply?.toNumber()) *
                             100
                           : 0
                       }
@@ -298,12 +303,14 @@ export const NFTSales = () => {
                       <p className="mb-0">
                         {!totalMintedLoading && !maxSupplyLoading
                           ? (
-                              (totalMinted.toNumber() / maxSupply.toNumber()) *
+                              (totalMinted?.toNumber() /
+                                maxSupply?.toNumber()) *
                               100
                             ).toFixed(2)
                           : 0}
-                        % ({totalMintedLoading ? "..." : totalMinted.toString()}
-                        / {maxSupplyLoading ? "..." : maxSupply.toString()})
+                        % (
+                        {totalMintedLoading ? "..." : totalMinted?.toString()}/{" "}
+                        {maxSupplyLoading ? "..." : maxSupply?.toString()})
                       </p>
                     </div>
                   </div>
